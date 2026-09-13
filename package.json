@@ -1,0 +1,22 @@
+{
+  "name": "playground-omega",
+  "private": true,
+  "description": "OMEGA Playground — the in-monorepo rehearsal brand: one brand config, every target (web, backend, desktop, browser extension). Test infrastructure, never production.",
+  "workspaces": [
+    "targets/*"
+  ],
+  "scripts": {
+    "start": "omega dev",
+    "dev": "omega dev",
+    "manage": "omega manage",
+    "deploy": "omega deploy",
+    "pipeline": "omega pipeline --require=analytics,disperse,update,bookmark"
+  },
+  "devDependencies": {
+    "@omega.js/manager": "file:omega_modules/omega.js-manager-0.50.0.tgz"
+  },
+  "overrides": {
+    "@omega.js/mcp-router": "file:omega_modules/omega.js-mcp-router-0.50.0.tgz",
+    "@omega.js/client": "file:omega_modules/omega.js-client-0.50.0.tgz"
+  }
+}

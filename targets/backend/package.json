@@ -1,0 +1,25 @@
+{
+  "name": "playground-backend",
+  "version": "0.0.1",
+  "description": "OMEGA Playground backend (rehearsal brand Cloud Functions)",
+  "private": true,
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "@omega.js/backend": "file:../../omega_modules/omega.js-backend-0.50.0.tgz",
+    "firebase-admin": "^13.10.0",
+    "firebase-functions": "^7.2.5"
+  },
+  "scripts": {
+    "start": "omega serve",
+    "deploy": "omega deploy",
+    "emulator": "omega emulator",
+    "test": "node --require ./test/_helpers/connect-trap.js --test 'test/_unit/**/*.test.js'",
+    "test:offline": "npx omega test",
+    "build": "npx omega build",
+    "test:static": "npm test",
+    "test:emulator": "omega test"
+  },
+  "license": "UNLICENSED"
+}
