@@ -1,0 +1,24 @@
+# ========== Default Values ==========
+
+.DS_Store
+node_modules/
+/dist/
+/release/
+/.cache/
+/.omega/
+/.claude/
+.env
+*.log
+/logs/
+
+# Signing artifacts: never commit these. config/certs/ keeps its README, the one
+# tracked explanation of where the real material lives.
+config/certs/*
+!config/certs/README.md
+*.p12
+*.cer
+*.mobileprovision
+*.p8
+*.pem
+
+# ========== Custom Values ==========

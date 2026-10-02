@@ -1,0 +1,31 @@
+{
+  "name": "playground-desktop",
+  "version": "0.0.5",
+  "author": "OMEGA Playground",
+  "private": true,
+  "description": "OMEGA desktop app",
+  "devDependencies": {
+    "@omega.js/desktop": "file:../../omega_modules/omega.js-desktop-0.55.0.tgz",
+    "electron": "^42.6.0",
+    "electron-builder": "^26.16.1",
+    "gulp": "^5.0.1"
+  },
+  "scripts": {
+    "start": "omega dev",
+    "gulp": "gulp",
+    "build": "omega build",
+    "package": "omega package",
+    "package:quick": "omega package --quick",
+    "release:local": "omega publish --local",
+    "postinstall": "node -e \"try { require('@omega.js/desktop/scripts/sync-nvmrc') } catch (e) {}\"",
+    "test": "omega test",
+    "electron": "electron .",
+    "deploy": "omega deploy",
+    "clean": "omega clean",
+    "update": "omega update",
+    "validate-certs": "omega validate-certs"
+  },
+  "main": "dist/main.bundle.js",
+  "license": "UNLICENSED",
+  "dependencies": {}
+}

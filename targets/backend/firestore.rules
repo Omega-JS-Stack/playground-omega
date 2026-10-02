@@ -1,0 +1,69 @@
+// ============================================================================
+// YOUR Firestore rules. This file is the SOURCE and it is yours — @omega.js/backend
+// never rewrites the rules you write here.
+//
+// `omega build` COMPILES this file together with the framework half into
+// dist/firestore.rules, and firebase.json points the emulator AND
+// `firebase deploy` at that compiled artifact. Never edit the compiled file.
+//
+//   Framework half : node_modules/@omega.js/backend/templates/firestore.framework.rules
+//   Compiled output: dist/firestore.rules  (GENERATED — do not edit)
+//
+// MERGE-BY-MATCH — how you TIGHTEN a framework rule. Firestore ORs `allow`
+// across sibling match blocks, so a second `match /users/{uid}` could only ever
+// widen access. Instead, a match block here whose PATH matches a framework
+// block's (wildcard names do not have to agree) is MERGED into it: for an op
+// both blocks declare, your condition is ANDed onto the framework's.
+//
+//   you write here          match /users/{userId} {
+//                             allow create, update: if !isWritingAny(['xp']) && isEmailVerified();
+//                           }
+//   the framework ships     match /users/{uid} {
+//                             allow create, update: if isUser(uid) && !isWritingFrameworkField();
+//                           }
+//   dist/firestore.rules    match /users/{uid} {
+//                             allow create, update: if isUser(uid) && !isWritingFrameworkField() && (!isWritingAny(['xp']) && isEmailVerified());
+//                           }
+//
+// Ops pair by NAME, so name the same ones the framework does (`allow write`
+// beside its `allow create, update` would WIDEN, not tighten — the compiler
+// says so out loud). An op ONLY you declare is appended as written (that op
+// widens, as sibling blocks always did); a nested match of yours splices in; a
+// path the framework does not define is yours alone and passes through
+// untouched.
+//
+// Both halves land in the SAME `match /databases/{database}/documents` scope,
+// so your rules may call ANY framework helper — declaration order does not
+// matter. `is*` asks a question, `get*` hands back a value:
+//
+//   isAuthenticated()   isUser(id)          isOwner()
+//   isAdmin()           isEmailVerified()
+//   isWritingAny(list)  isWritingField(f)   isCreatingField(f) isUpdatingField(f)
+//   getAuthUid()        getAuthEmail()      getRoles()
+//   getExistingData()   getIncomingData()
+//
+// Fields are TOP-LEVEL: protecting `xp.total` means listing `'xp'`.
+// See the framework half for the full list and what each one reads (`getRoles()`
+// bills a document read per call, and so does every `isAdmin()`; the rest are
+// free).
+// ============================================================================
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ─── Your rules ──────────────────────────────────────────────────────────
+    // Notes, the playground's example feature. A note is readable and deletable
+    // by its owner alone (isOwner() reads the STORED owner once the doc
+    // exists); a create or update must name the caller as the owner, so a note
+    // can never be written into, or handed to, another account.
+    match /notes/{id} {
+      allow read, delete: if isOwner();
+      allow create, update: if isOwner() && isUser(getIncomingData().get('owner', null));
+    }
+
+    // The per-user counter the notes/on-create event keeps. Server-written only
+    // (the Admin SDK bypasses rules); its owner may read it.
+    match /notes-stats/{uid} {
+      allow read: if isUser(uid);
+    }
+  }
+}

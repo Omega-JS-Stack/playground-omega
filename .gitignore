@@ -1,0 +1,25 @@
+# ========== Default Values ==========
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# OMEGA manager state (derived data, never committed)
+.omega/
+
+# Run logs (truncated on every launch, never committed)
+logs/
+test/e2e/.logs/
+
+# Secrets
+.env
+.env.*
+
+# Claude Code settings for this machine alone (a linked brand's local omega plugin)
+.claude/settings.local.json
+
+# OS
+.DS_Store
+
+# ========== Custom Values ==========

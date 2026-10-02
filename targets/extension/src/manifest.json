@@ -1,0 +1,145 @@
+{
+  // Basic info
+  name: '__MSG_appName__',
+  short_name: '__MSG_appNameShort__',
+  description: '__MSG_appDescription__',
+
+  // Background script
+  background: {
+    service_worker: 'assets/js/components/background.bundle.js',
+  },
+
+  // Permissions
+  permissions: [
+    // The sign-in round trip watches the brand site's /token tab (@omega.js/manager/docs/extension/auth.md)
+    'tabs',
+    // omega.extension.storage: the notes.autoSaveSelection setting
+    'storage',
+    // The offscreen document background opens to parse note text
+    'offscreen',
+    // The notes side panel
+    'sidePanel',
+    // 'activeTab',
+    // 'scripting',
+  ],
+  host_permissions: [
+    // 'http://*/*',
+    // 'https://*/*',
+  ],
+
+  // Options page
+  options_ui: {
+    page: 'views/options/index.html',
+  },
+
+  // Content scripts
+  content_scripts: [
+    // "Save selection as note", on the brand's own site only: the match is
+    // brand.url in config/omega.json5, resolved when the manifest compiles.
+    {
+      matches: [
+        '{{ brand.url }}/*',
+      ],
+      js: [
+        'assets/js/components/content.bundle.js',
+      ],
+      css: [
+        'assets/css/components/content.bundle.css',
+      ],
+      run_at: 'document_end',
+      all_frames: false,
+    },
+    // {
+    //   matches: [
+    //     'http://*/*',
+    //     'https://*/*',
+    //   ],
+    //   js: [
+    //     'assets/js/components/content.bundle.js',
+    //   ],
+    //   css: [
+    //     'assets/css/components/content.bundle.css',
+    //   ],
+    //   run_at: 'document_end',
+    //   all_frames: false,
+    // },
+  ],
+
+  // Browser action
+  action: {
+    default_title: '__MSG_appName__',
+    default_popup: 'views/popup/index.html',
+  },
+
+  // Side panel
+  side_panel: {
+    default_path: 'views/sidepanel/index.html',
+  },
+
+  // Content security policy
+  content_security_policy: {
+    extension_pages: "script-src 'self'; object-src 'self'; worker-src 'self';",
+  },
+
+  // Origins allowed to message this extension. DECLARING the key is
+  // authoritative — an empty array ships NO origins at all, including the
+  // framework default that lets the local website talk to the extension.
+  // Leave it out to keep the default.
+  // externally_connectable: {
+  //   matches: [
+  //     'https://example.com/*',
+  //   ],
+  // },
+
+  // Web accessible resources
+  web_accessible_resources: [
+    // Icon set (C4 cp112): lets content-script-injected UI fetch icons via
+    // chrome.runtime.getURL('assets/fa/…'). Extension pages don't need this.
+    {
+      matches: [
+        '<all_urls>',
+      ],
+      resources: [
+        'assets/fa/*',
+      ],
+    },
+    // {
+    //   matches: [
+    //     '<all_urls>',
+    //   ],
+    //   resources: [
+    //     'assets/styles/content.bundle.css',
+    //   ],
+    // },
+  ],
+
+  // Commands
+  commands: {
+    // test: {
+    //   description: 'Test',
+    //   suggested_key: {
+    //     default: 'Alt+T',
+    //   },
+    // },
+  },
+
+  // Sandbox
+  sandbox: {
+    pages: [
+      // 'views/sandbox/index.html',
+    ],
+  },
+
+  // IDs
+  browser_specific_settings: {
+    gecko: {
+      // REQUIRED for the firefox artifact — packaging fails without it.
+      id: 'extension@playground.omegajs.dev',
+      // strict_min_version: '91.0',
+      data_collection_permissions: {
+        required: ['authenticationInfo'],
+        optional: ['technicalAndInteraction'],
+      },
+    },
+  },
+}

@@ -1,0 +1,22 @@
+{
+  "name": "playground-extension",
+  "version": "0.0.5",
+  "private": true,
+  "description": "OMEGA extension app",
+  "devDependencies": {
+    "@omega.js/extension": "file:../../omega_modules/omega.js-extension-0.55.0.tgz",
+    "gulp": "^5.0.1"
+  },
+  "dependencies": {},
+  "scripts": {
+    "start": "omega dev",
+    "gulp": "gulp",
+    "build": "omega build",
+    "publish": "OMEGA_IS_PUBLISH=true npm run gulp -- publish",
+    "test": "omega test",
+    "deploy": "omega deploy",
+    "clean": "omega clean",
+    "update": "omega update"
+  },
+  "license": "UNLICENSED"
+}
